@@ -48,7 +48,7 @@ class TaskCreateSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         user = self.context['request'].user 
-        category_name = validated_data.pop('category')
+        category_name = validated_data.pop('category', None)
         if category_name:
             try:
                 category = Category.objects.get(name = category_name)

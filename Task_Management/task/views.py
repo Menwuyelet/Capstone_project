@@ -1,8 +1,8 @@
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .models import Task, Category
 from .serializers import CategoryViewSerializer,CategoryCreateSerializer, TaskCreateSerializer, TaskListSerializer,TaskDetailSerializer, TaskUpdateSerializer
-from rest_framework.response import Response
+
 
 ## Task views
 class TaskListView(generics.ListAPIView):
@@ -15,7 +15,7 @@ class TaskListView(generics.ListAPIView):
         status = self.request.query_params.get('status')
         priority = self.request.query_params.get('priority')
         due_date = self.request.query_params.get('due_date')
-
+        title = self.request.query_params.get('title')
         # filter options
         if category_name:
             queryset = queryset.filter(category__name = category_name)
@@ -25,7 +25,8 @@ class TaskListView(generics.ListAPIView):
             queryset = queryset.filter(priority = priority)
         if due_date:
             queryset = queryset.filter(due_date = due_date)
-
+        if title:
+            queryset = queryset.filter(title__icontains = title)
         # sorting option
         sort_by = self.request.query_params.get('sort_by', 'due_date')  # Default to due_date if not provided
         sort_order = self.request.query_params.get('sort_order', 'asc')  # Default to ascending
