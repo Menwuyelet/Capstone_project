@@ -6,3 +6,4 @@ urlpatterns = [
     path('user/', include('users.urls'), name = 'users-management'),
     path('task/', include('task.urls'), name = 'Tasks-managment'),
 ]
+"""write the docmentation for the user and for the mentors and add search functionality by description content."""

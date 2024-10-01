@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .models import Task, Category
-from .serializers import CategoryViewSerializer,CategoryCreateSerializer, TaskCreateSerializer, TaskListSerializer,TaskDetailSerializer, TaskUpdateSerializer
+from .serializers import CategoryViewSerializer, CategoryCreateSerializer, CategoryUpdateSerializer, TaskCreateSerializer, TaskListSerializer,TaskDetailSerializer, TaskUpdateSerializer
 
 
 ## Task views
@@ -16,6 +16,7 @@ class TaskListView(generics.ListAPIView):
         priority = self.request.query_params.get('priority')
         due_date = self.request.query_params.get('due_date')
         title = self.request.query_params.get('title')
+        description = self.request.query_params.get('description')
         # filter options
         if category_name:
             queryset = queryset.filter(category__name = category_name)
@@ -27,6 +28,9 @@ class TaskListView(generics.ListAPIView):
             queryset = queryset.filter(due_date = due_date)
         if title:
             queryset = queryset.filter(title__icontains = title)
+        if description:
+            queryset = queryset.filter(description__icontains = description)
+
         # sorting option
         sort_by = self.request.query_params.get('sort_by', 'due_date')  # Default to due_date if not provided
         sort_order = self.request.query_params.get('sort_order', 'asc')  # Default to ascending
@@ -87,7 +91,7 @@ class CategoryCreateView(generics.CreateAPIView):
         serializer.save(user=self.request.user)
 
 class CategoryUpdateView(generics.UpdateAPIView):
-    serializer_class = CategoryCreateSerializer
+    serializer_class = CategoryUpdateSerializer
     permission_classes = [IsAuthenticated]
     lookup_field = 'name'
     

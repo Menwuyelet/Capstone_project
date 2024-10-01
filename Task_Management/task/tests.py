@@ -134,20 +134,31 @@ class TaskAPITestCase(APITestCase):
 
         Task.objects.create(
             title='Unrelated Task',
-            description='Different Task',
+            description='Different Task with the description to search with.',
             due_date='2024-10-06',
             priority='medium',
             user=self.user
         )
-
+        # test search with title 
         url = reverse('Task-list')  # Assuming you support search via query params
         search_term = 'Another'
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
         response = self.client.get(f'{url}?title={search_term}')
-        
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)  # Only the matching task should be returned
         self.assertEqual(response.data[0]['title'], 'Another Task')
+
+        # test search with description
+        url = reverse('Task-list')  # Assuming you support search via query params
+        search_term = 'Different Task'
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
+        response = self.client.get(f'{url}?description={search_term}')
+
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)  # Only the matching task should be returned
+        self.assertIn('Different Task with the', response.data[0]['short_description'])
 
         url = reverse('Task-list')
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
