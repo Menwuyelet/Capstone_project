@@ -36,6 +36,14 @@ if the user data is valid the api sends respons with "refresh" and "access" toke
 
 - after getting "refresh" and "access" tokens, a user can send other requests for creating, updatin, deleting tasks and categoryies and to logout and delete their acount.
 
+- to update a users profile including its password a user can send PUT or PATCH request to {user/update/} with authentication header and the raw JSON data 
+{
+  "username": "updatedusername",
+  "email": "updated@example.com",
+  "current_password": "current_password",
+  "new_password": "new_password"
+}
+
 - to create task a user can send a POST request to {task/create/} with authentication header containing accsess token and the raw JSON data 
 {
     "title": "title",
@@ -76,3 +84,11 @@ if the user data is valid the api sends respons with "refresh" and "access" toke
 - to access the details of a specific task a user can send a GET request to {task/detail/<str:title>/}  with authentication header  containing accsess token.
 
 
+"refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcyNzk1MDg5MCwiaWF0IjoxNzI3ODY0NDkwLCJqdGkiOiIwMTBhOWRlOGEyZWI0YWI3Yjk5Y2RlYTA1OTRlZGRkYiIsInVzZXJfaWQiOjN9.OqFm3VRu3s122PD4atpvEf45FRJm0sqWbc2WAgtBIZ8",
+
+{
+  "username": "updatedusername",
+  "email": "updated@example.com",
+  "current_password": "password",
+  "new_password": "newpassword"
+}

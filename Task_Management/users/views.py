@@ -1,5 +1,5 @@
 from rest_framework import generics, status
-from .serialiazers import UserSerializer
+from .serialiazers import UserSerializer,UpdateProfileAndPasswordSerializer
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -31,3 +31,24 @@ class DeleteUserView(APIView):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
+class UpdateProfileAndPasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        user = request.user
+        serializer = UpdateProfileAndPasswordSerializer(user, data=request.data, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()  # This will handle both profile and password update
+            return Response({'message': 'Profile and password updated successfully'}, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request):
+        user = request.user
+        serializer = UpdateProfileAndPasswordSerializer(user, data=request.data, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()  # This will handle both profile and password update
+            return Response({'message': 'Profile and password updated successfully'}, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
