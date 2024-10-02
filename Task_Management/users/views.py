@@ -31,24 +31,9 @@ class DeleteUserView(APIView):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-class UpdateProfileAndPasswordView(APIView):
+class UpdateProfileAndPasswordView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = UpdateProfileAndPasswordSerializer
 
-    def patch(self, request):
-        user = request.user
-        serializer = UpdateProfileAndPasswordSerializer(user, data=request.data, partial=True)
-        
-        if serializer.is_valid():
-            serializer.save()  # This will handle both profile and password update
-            return Response({'message': 'Profile and password updated successfully'}, status=status.HTTP_200_OK)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    def put(self, request):
-        user = request.user
-        serializer = UpdateProfileAndPasswordSerializer(user, data=request.data, partial=True)
-        
-        if serializer.is_valid():
-            serializer.save()  # This will handle both profile and password update
-            return Response({'message': 'Profile and password updated successfully'}, status=status.HTTP_200_OK)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_object(self):
+        return self.request.user

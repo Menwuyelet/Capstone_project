@@ -17,10 +17,11 @@ class UserSerializer(serializers.ModelSerializer):
         )
         return user
 
+    
 class UpdateProfileAndPasswordSerializer(serializers.ModelSerializer):
     current_password = serializers.CharField(write_only=True, required=False)
     new_password = serializers.CharField(write_only=True, required=False)
-    
+
     class Meta:
         model = User
         fields = ['username', 'email', 'current_password', 'new_password']
@@ -28,7 +29,7 @@ class UpdateProfileAndPasswordSerializer(serializers.ModelSerializer):
     def validate(self, data):
         user = self.instance
 
-        # Validate if current password is provided and is correct
+        # If a new password is provided, validate the current password
         if 'new_password' in data and data['new_password']:
             if not user.check_password(data['current_password']):
                 raise serializers.ValidationError({'current_password': 'Current password is incorrect.'})
@@ -46,3 +47,4 @@ class UpdateProfileAndPasswordSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+    
