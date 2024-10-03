@@ -16,6 +16,8 @@ class TaskAPITestCase(APITestCase):
         # Create a second user for testing ownership
         self.other_user = User.objects.create_user(username='otheruser', password='otherpass', email='otheruser@example.com')
         self.category = Category.objects.create(name='Test Category', user=self.user)
+
+        # create a tasks for test
         self.task = Task.objects.create(
             title='Test Task',
             description='Test Task Description',
@@ -23,6 +25,7 @@ class TaskAPITestCase(APITestCase):
             priority='high',
             user=self.user
         )
+
         self.task = Task.objects.create(
             title='Another Task',
             description='Task Description',
@@ -46,7 +49,7 @@ class TaskAPITestCase(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Task.objects.count(), 3)  # Ensure the new task is created
+        self.assertEqual(Task.objects.count(), 3)  # ensure the new task is created in addition to the existing two
    
     def test_create_task_missing_title(self):
         url = reverse('Task-create')
@@ -58,7 +61,7 @@ class TaskAPITestCase(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(Task.objects.count(), 2)
+        self.assertEqual(Task.objects.count(), 2) # ensure the task is not created
 
     def test_create_task_with_unauthenticated_user(self):
         url = reverse('Task-create')
@@ -84,6 +87,7 @@ class TaskAPITestCase(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Task.objects.count(), 3)
+        
         # duplicate
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
