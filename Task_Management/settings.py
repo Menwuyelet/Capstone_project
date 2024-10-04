@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-834nf*=&nkm*yrdc#3u#7_1hh8nln%%v3m%=%0v^!s_xn!8^*y
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['menwu.pythonanywhere.com', 'http://127.0.0.1:8000/']
 
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
